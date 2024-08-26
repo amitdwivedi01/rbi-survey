@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Survey = require('../models/Survey');
+const Survey = require('../models/Survey.js');
 
 // Route to submit a survey response
 router.post('/submit-survey', async (req, res) => {

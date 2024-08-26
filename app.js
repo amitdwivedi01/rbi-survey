@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
-const surveyRoutes = require('./routes/survey');
+const surveyRoutes = require('./routes/Survey.js');
 
 const app = express();
 

@@ -25,4 +25,34 @@ router.post('/submit-survey', async (req, res) => {
   }
 });
 
+router.get('/get-all-surveys', async (req, res) => {
+  try {
+      const surveys = await Survey.find().sort({ submittedAt: -1 });
+
+      const formattedSurveys = surveys.map(survey => ({
+          id: survey._id,
+          responses: survey.responses.map(response => ({
+              question: response.question,
+              answer: typeof response.answer === 'object' 
+                      ? `${response.answer.answer || ''} ${response.answer.otherText || ''}`.trim()
+                      : response.answer
+          })),
+          name: survey.isAnonymous ? 'Anonymous' : survey.name,
+          email: survey.isAnonymous ? 'Anonymous' : survey.email,
+          submittedAt: survey.submittedAt,
+      }));
+
+      // Extract unique submittedAt dates for filtering
+      const uniqueDates = [
+          ...new Set(surveys.map(survey => new Date(survey.submittedAt).toDateString()))
+      ];
+
+      res.status(200).json({ count: surveys.length, surveys: formattedSurveys, uniqueDates });
+  } catch (error) {
+      console.error('Failed to fetch survey data', error);
+      res.status(500).json({ error: 'Failed to fetch survey data' });
+  }
+});
+
+
 module.exports = router;

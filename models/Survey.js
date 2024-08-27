@@ -4,7 +4,7 @@ const surveySchema = new mongoose.Schema({
   responses: [
     {
       question: String,
-      answer: String,
+      answer: mongoose.Schema.Types.Mixed,
       options: [String]
     }
   ],
